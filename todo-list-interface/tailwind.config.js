@@ -1,14 +1,22 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: [
-    './index.html',
-    './src/**/*.{js,jsx,ts,tsx,vue}'
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors:{
+        "blue-normal": "#3454FA",
+        "blue-dark":  "#0026EC",
+        "red-btn": "#FF0000"
+      },
+      fontFamily:{
+        Inter:['Inter'],
+        Jura:['Jura'],
+        JetbrainsMono:['JetbrainsMono']
+      }
+    },
   },
   plugins: [],
 }
-
-
-

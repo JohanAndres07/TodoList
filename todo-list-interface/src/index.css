@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: 'Inter';
+    src: url('src/assets/fonts/Inter/Inter.ttc');
+}
+
+@font-face {
+    font-family: 'Jura';
+    src: url('src/assets/fonts/Jura/Jura-VariableFont_wght.ttf');
+}
+
+@font-face {
+    font-family: 'JetbrainsMono';
+    src: url('src/assets/fonts/JetbrainsMono/JetBrainsMono-VariableFont_wght.ttf');
+}
