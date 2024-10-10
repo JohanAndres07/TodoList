@@ -1,19 +1,23 @@
-import { useState } from 'react'
-import {Body} from "./components/Body/Body"
-import  {Header} from "./components/Header/Header" 
+
+
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Login } from './components/Body/login/Login';
+import {Register} from './components/Body/register/Register'; 
+import { Body } from "./components/Body/Body";
+
 
 function App() {
-  const [view, setView] = useState('list'); 
 
-  const toggleView = (newView) => {
-  setView(newView);
-  };
   return (
-    <>
-    <Header toggleView ={toggleView} currentView={view}/>
-    <Body view={view}/>
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register/>} />
+        <Route path="/tasks" element={<Body />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
+

@@ -1,3 +1,6 @@
+
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -21,11 +24,16 @@ mongoose.connect('mongodb://127.0.0.1:27017/todolist', {
     console.error('Error connecting to MongoDB', err);
 });
 
+
 app.use('/tasks', taskRoutes);
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/admin', adminRoutes);
 app.use('/groups', groupRoutes);
+
+
+console.log('JWT_SECRET:', process.env.JWT_SECRET);
+
 
 const port = 3000;
 app.listen(port, () => {

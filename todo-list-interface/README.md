@@ -1,8 +1,11 @@
 # React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Installing Vite
+To install Vite as a development dependency in your project, follow these steps:
 
-Currently, two official plugins are available:
+1. Open your terminal in the root of your project.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+2. Run the following command to install Vite:npm install vite --save-dev
+
+3. Run the development server: To start the Vite development server, use the following command:
+	npm run dev

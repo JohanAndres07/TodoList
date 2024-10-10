@@ -2,7 +2,6 @@ const AuthService = require('../services/authService');
 const UserService = require('../services/userService');
 const EmailService = require('../services/emailService');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
 
 class AuthController {
     async register(req, res) {
@@ -18,15 +17,15 @@ class AuthController {
                 return res.status(400).json({ message: 'Email already registered' });
             }
 
-            const hashedPassword = await bcrypt.hash(password, 10);
-            const newUser = await UserService.createUser({ username, email, password: hashedPassword });
+            
+            const newUser = await UserService.createUser({ username, email, password });
 
             const verificationToken = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
             await EmailService.sendVerificationEmail(newUser.email, verificationToken);
 
-            res.status(201).json({ message: 'User registered. Please verify your email.' });
+            return res.status(201).json({ message: 'User registered. Please verify your email.' });
         } catch (err) {
-            res.status(500).json({ message: err.message });
+            return res.status(500).json({ message: 'Internal server error' });
         }
     }
 
@@ -43,12 +42,12 @@ class AuthController {
                 return res.status(400).json({ message: 'Email already registered' });
             }
 
-            const hashedPassword = await bcrypt.hash(password, 10);
-            const newUser = await UserService.createUser({ username, email, password: hashedPassword, emailVerified: true });
+            
+            const newUser = await UserService.createUser({ username, email, password, emailVerified: true });
 
-            res.status(201).json({ message: 'User registered successfully without email verification.' });
+            return res.status(201).json({ message: 'User registered successfully without email verification.' });
         } catch (err) {
-            res.status(500).json({ message: err.message });
+            return res.status(500).json({ message: 'Internal server error' });
         }
     }
 
@@ -58,6 +57,7 @@ class AuthController {
             if (!email || !password) {
                 return res.status(400).json({ message: 'Email and password are required' });
             }
+
             const { token } = await AuthService.login(email, password);
             res.json({ token });
         } catch (err) {
@@ -87,9 +87,9 @@ class AuthController {
             user.emailVerified = true;
             await user.save();
 
-            res.status(200).json({ message: 'Email verified successfully' });
+            return res.status(200).json({ message: 'Email verified successfully' });
         } catch (err) {
-            res.status(400).json({ message: 'Invalid or expired token' });
+            return res.status(400).json({ message: 'Invalid or expired token' });
         }
     }
 }
