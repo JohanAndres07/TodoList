@@ -46,6 +46,7 @@ class TaskController {
     async createTask(req, res) {
         try {
             const taskData = req.body;
+            taskData.user = req.user.id; 
             const newTask = await TaskService.createTask(taskData, req.userId);
             res.status(201).json(newTask);
         } catch (err) {
@@ -85,6 +86,17 @@ class TaskController {
             const page = parseInt(req.query.page) || 1;
             const limit = parseInt(req.query.limit) || 10;
             const tasks = await TaskService.getAllTasksPaginated(page, limit);
+            res.json(tasks);
+        } catch (err) {
+            res.status(500).json({ message: err.message });
+        }
+    }
+
+
+    async getTaskForIdGroup(req, res) {
+        try {
+            const { groupId } = req.params;
+            const tasks = await TaskService.getTasksByGroupId(groupId, req.userId);
             res.json(tasks);
         } catch (err) {
             res.status(500).json({ message: err.message });

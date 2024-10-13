@@ -1,11 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { createTask } from '../services/tasks/CreateTask';
+import { createGroup } from '../services/groups/CreateGroups';
 
-export const AddPop = ({ onClose }) => {
-
+export const AddPop = ({ onClose, view, reload, groupId, state, setState }) => {
+    const [inputValue, setInputValue] = useState("");
 
     const handleBackgroundClick = (e) => {
         if (e.target === e.currentTarget) {
-            onClose(); 
+            onClose();
+        }
+    };
+
+    const click = async () => {
+        try {
+            if (view === 'group' && state) {
+                await createTask(inputValue, groupId); 
+            } else if (view === 'group' && !state) {
+                await createGroup(inputValue);
+            } else {
+                await createTask(inputValue); 
+            }
+            
+            setInputValue("");
+            reload();
+            onClose();
+        } catch (error) {
+            console.error('Error to create task:', error);
         }
     };
 
@@ -18,15 +38,18 @@ export const AddPop = ({ onClose }) => {
                 <input
                     type="text"
                     name="text"
-                    id=""
-                    placeholder="text here..."
-                    className="font-Jura overflow-auto p-4 text-xl flex-grow  w-full h-[7rem]"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    placeholder="Write here..."
+                    className="font-Jura overflow-auto p-4 text-xl flex-grow w-full h-[7rem]"
+                    autoComplete="off"
                 />
+
                 <input
                     className="w-full h-[3rem] bg-blue-normal text-white font-bold font-Inter rounded-b-md mt-2"
                     type="button"
                     value="ADD"
-                    onClick={onClose} 
+                    onClick={click}
                 />
             </div>
         </section>

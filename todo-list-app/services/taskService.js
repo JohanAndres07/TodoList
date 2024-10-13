@@ -5,8 +5,8 @@ class TaskService {
         return await Task.find({ user: userId });
     }
 
-    async createTask(taskData, userId) {
-        const task = new Task({ ...taskData, user: userId });
+    async createTask(taskData) {
+        const task = new Task({ ...taskData});
         return await task.save();
     }
 
@@ -45,6 +45,11 @@ class TaskService {
     async getAllTasksPaginated(page = 1, limit = 10) {
         const skip = (page - 1) * limit;
         return await Task.find().skip(skip).limit(limit);
+    }
+
+
+    async getTasksByGroupId(groupId, userId) {
+        return await Task.find({ group: groupId, user: userId }); 
     }
 }
 

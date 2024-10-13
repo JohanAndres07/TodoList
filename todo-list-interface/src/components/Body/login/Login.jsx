@@ -5,6 +5,7 @@ import emailIcon from '../../../assets/images/email.svg';
 import keyIcon from '../../../assets/images/key.svg';
 
 export const Login = () => {
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -15,7 +16,6 @@ export const Login = () => {
             const { token, userId } = await login(email, password); 
             localStorage.setItem('token', token);
             localStorage.setItem('userId', userId);
-            console.log('Login successful');
             navigate('/tasks');
         } catch (error) {
             console.error(error);
@@ -55,7 +55,7 @@ export const Login = () => {
                         onClick={handleLogin} />
                 </div>
 
-                {errorMessage && <div className="text-red-500 mb-4">{errorMessage}</div>}
+                {errorMessage && <div className="pl-4 text-red-500 mb-4">{errorMessage}</div>}
                 <p className='font-Jura pl-4'>Don't have an account?
                     <Link to="/register" className='text-blue-600 underline font-Jura'> Signup here</Link>
                 </p>

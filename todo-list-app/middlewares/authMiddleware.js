@@ -20,9 +20,12 @@ module.exports = async function (req, res, next) {
             return res.status(401).json({ message: 'Email not verified' });
         }
 
+        
+        req.userId = user._id; 
         req.user = { id: user._id, role: user.role };
         next();
     } catch (err) {
         res.status(400).json({ message: 'Invalid token' });
     }
 };
+

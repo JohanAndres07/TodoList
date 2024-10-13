@@ -1,14 +1,32 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import React from 'react';
+import { updateTask } from '../services/tasks/UpdateTask';
 
-export function EditPop({ task, onClose }) {
-    const [text, setText] = useState(task); 
-    const [dueDate, setDueDate] = useState('');
-
-
+export function EditPop({ task, onClose , reload}) {
+    const [text, setText] = useState(task.taskName); 
+    const [dueDate, setDueDate] = useState(task.dueDate);
+    const [status, setStatus] = useState(task.status);
+    const [priority, setPriority] = useState(task.priority);
+    useEffect(() => {
+        setText(task.taskName);
+        setDueDate(task.dueDate ? task.dueDate.slice(0, 10) : ''); 
+        setStatus(task.status);
+        setPriority(task.priority);
+    }, [task]);
+    
     const handleBackgroundClick = (e) => {
         if (e.target === e.currentTarget) {
             onClose(); 
+        }
+    };
+
+    const handleUpdate = async () => {
+        try {
+            await updateTask(task._id, text, dueDate, status, priority);  
+            onClose(); 
+            reload();
+        } catch (error) {
+            console.error('Error updating task:', error.message || 'An error occurred');
         }
     };
 
@@ -40,10 +58,12 @@ export function EditPop({ task, onClose }) {
                                 id="status"
                                 name="status"
                                 className="h-10 w-full ml-2 p-2 bg-white border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                                value={status}
+                                onChange={(e) => setStatus(e.target.value)}
                             >
                                 <option value="pending">Pending</option>
                                 <option value="completed">Completed</option>
-                                <option value="in-progress">In Progress</option>
+                                <option value="in_progress">In Progress</option>
                             </select>
                         </div>
 
@@ -53,6 +73,8 @@ export function EditPop({ task, onClose }) {
                                 id="priority"
                                 name="priority"
                                 className="h-10 w-full ml-2 p-2 bg-white border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                                value={priority}
+                                onChange={(e) => setPriority(e.target.value)}
                             >
                                 <option value="low">Low</option>
                                 <option value="medium">Medium</option>
@@ -81,10 +103,10 @@ export function EditPop({ task, onClose }) {
                         className="w-[45%] h-12 bg-blue-500 text-white font-bold rounded-full cursor-pointer hover:bg-blue-600 transition ease-in-out duration-300"
                         type="button"
                         value="DONE"
+                        onClick={handleUpdate} 
                     />
                 </div>
             </div>
         </section>
     );
 }
-

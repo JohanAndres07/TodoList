@@ -13,5 +13,5 @@ router.post('/', TaskController.createTask);
 router.put('/:id', TaskController.updateTask);
 router.patch('/:id', TaskController.patchTask);
 router.delete('/:id', TaskController.deleteTask);
-
+router.get('/:groupId', TaskController.getTaskForIdGroup);
 module.exports = router;

@@ -1,47 +1,26 @@
 import { useState } from 'react';
-import axios from 'axios';
+import { createTask } from '../services/tasks/CreateTask';
+import { createGroup } from '../services/groups/CreateGroups';
 
-export const Add = ({ view }) => {
+export const Add = ({ view, reload }) => {
     const [inputValue, setInputValue] = useState("");
-    const [error, setError] = useState('');
+
 
     const handleChange = (event) => {
         setInputValue(event.target.value);
     };
-
     const click = async () => {
-        const userId = localStorage.getItem('userId'); 
-        const token = localStorage.getItem('token'); 
-
-        if (!userId || !token) {
-            setError('No userId or token found in localStorage.');
-            return;
-        }
-
-
-        const taskData = {
-            taskName: inputValue, 
-            dueDate: new Date(), 
-            status: "pending",
-            priority: "medium",
-        };
-console.log(token);
         try {
-            const response = await axios.post(`http://localhost:3000/tasks`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                    
-                }, taskData,userId,
-            });
-            console.log('Tarea creada:', response.data); 
-            setInputValue(""); 
-        } catch (error) {
-            if (error.response) {
-                setError(`Failed to create task: ${error.response.data.message}`);
-            } else {
-                setError('Failed to create task: Network error');
+            if(view !== 'task'){
+                await createGroup(inputValue);
+            }else{
+                await createTask(inputValue);
             }
-            console.error(error); 
+            setInputValue(""); 
+            reload();
+        } catch (errorMessage) {
+            setError(errorMessage); 
+            console.error('Error to create task:', errorMessage);
         }
     };
 
@@ -58,7 +37,6 @@ console.log(token);
                 value="ADD" 
                 onClick={click} 
             />
-            {error && <p className="text-red-500">{error}</p>} {/* Mostrar mensaje de error */}
         </div>
     );
 };
